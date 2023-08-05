@@ -1,0 +1,46 @@
+##
+##      To build the AI_VTOONIFY_ docker image
+##
+
+# base stuff
+FROM yeepeekoo/public:ai_base_osais
+
+## install requirements
+
+RUN pip3 install \
+    torchvision \
+    numpy
+
+
+RUN pip3 install \
+    cmake \
+    dlib \
+    ninja \
+    opencv-python \
+    tqdm \
+    wget
+
+RUN pip3 install torch
+RUN pip install lightning-utilities
+RUN pip3 install lightning
+
+# Install miniconda
+ENV CONDA_DIR /opt/conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda
+
+# Put conda in path so we can use conda activate
+ENV PATH=$CONDA_DIR/bin:$PATH
+
+RUN conda update conda
+
+RUN conda install -c pytorch -c conda-forge faiss-gpu
+RUN conda install -c pytorch-nightly -c nvidia cudatoolkit=11.3 torchvision
+
+#RUN conda install -c pytorch -c nvidia faiss-gpu=1.6.5
+#RUN conda install -c "pytorch/label/nightly" faiss-gpu
+#RUN conda install -c pytorch -c nvidia faiss-gpu mkl=2021 blas=1.0=mkl
+
+
+# run as a server
+CMD ["uvicorn", "main_fastapi:app", "--host", "0.0.0.0", "--port", "5000"]

@@ -1,0 +1,64 @@
+{
+    "engine": "vtoonify",
+    "name": "VToonify",
+    "location": "http://0.0.0.0",
+    "port": 5308,
+    "version": "1.0.6",
+    "description": "Image to Image",
+    "github": "https://github.com/williamyang1991/VToonify/",
+    "requiresGPU": true,
+    "isFree": false,
+    "default_cost": 16000,
+    "params": [{
+        "in": "url_upload",
+        "out": "-filename",
+        "isMandatory": false,
+        "type": "string",
+        "default": null,
+        "ui": {
+            "widget": "uiSelectPicture",
+            "column": 1
+        }
+    }, {
+        "in": "padding",
+        "out": "--padding",
+        "isMandatory": false,
+        "type": "int",
+        "default": 200,
+        "accept": {
+            "$in":[200, 400, 600],
+            "display":["200px", "400px", "600px"]
+        },
+        "freeAccess": {"$max": 200},
+        "ui": {
+            "title": "padding in px to the eye center",
+            "unit": "px",
+            "widget": "uiMultiToggle",
+            "column": 2
+        }
+    }, {
+        "in": "scale_image",
+        "out": "--scale_image",
+        "isMandatory": true,
+        "type": "boolean",
+        "default": true
+    }, {
+        "in": "model",
+        "out": "--ckpt",
+        "isMandatory": true,
+        "type": "string",
+        "default": "vtoonify_d_cartoon/vtoonify_s_d.pt"
+    }, {
+        "in": "backbone",
+        "out": "--backbone",
+        "isMandatory": true,
+        "type": "string",
+        "default": "dualstylegan"
+    }, {
+        "in": "output",
+        "out": "--output",
+        "isMandatory": true,
+        "type": "function",
+        "default": "$output_uid.ext"
+    }]
+}
