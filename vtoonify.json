@@ -3,7 +3,7 @@
     "name": "VToonify",
     "location": "http://0.0.0.0",
     "port": 5308,
-    "version": "1.0.6",
+    "version": "1.0.8",
     "description": "Image to Image",
     "github": "https://github.com/williamyang1991/VToonify/",
     "requiresGPU": true,
@@ -14,9 +14,17 @@
         "out": "-filename",
         "isMandatory": false,
         "type": "string",
-        "default": null,
+        "value": {
+            "default": null
+        },
         "ui": {
             "widget": "uiSelectPicture",
+            "filterExt": [".png", ".jpg", ".jpeg"],
+            "maxWidth": 1024,
+            "maxHeight": 1024,
+            "minWidth": 256,
+            "minHeight": 256,
+            "maxKb": 1024,
             "column": 1
         }
     }, {
@@ -24,12 +32,16 @@
         "out": "--padding",
         "isMandatory": false,
         "type": "int",
-        "default": 200,
-        "accept": {
-            "$in":[200, 400, 600],
+        "value": {
+            "default": 200,
+            "set":[200, 400, 600],
             "display":["200px", "400px", "600px"]
         },
-        "freeAccess": {"$max": 200},
+        "freeAccess": {
+            "default": 200,
+            "set":[200],
+            "display":["200px"]
+        },
         "ui": {
             "title": "padding in px to the eye center",
             "unit": "px",
@@ -41,24 +53,32 @@
         "out": "--scale_image",
         "isMandatory": true,
         "type": "boolean",
-        "default": true
+        "value": {
+            "default": true
+        }
     }, {
         "in": "model",
         "out": "--ckpt",
         "isMandatory": true,
         "type": "string",
-        "default": "vtoonify_d_cartoon/vtoonify_s_d.pt"
+        "value": {
+            "default": "vtoonify_d_cartoon/vtoonify_s_d.pt"
+        }
     }, {
         "in": "backbone",
         "out": "--backbone",
         "isMandatory": true,
         "type": "string",
-        "default": "dualstylegan"
+        "value": {
+            "default": "dualstylegan"
+        }
     }, {
         "in": "output",
         "out": "--output",
         "isMandatory": true,
         "type": "function",
-        "default": "$output_uid.ext"
+        "value": {
+            "default": "$output_uid.ext"
+        }
     }]
 }
