@@ -52,7 +52,7 @@ def getWarmupData(_id):
             ('--ckpt', "vtoonify_t_pixar/vtoonify.pt"),
             ('--backbone', "toonify"),
             ('-o', 'warmup.jpg'),
-            ('-filename', 'warmup.jpeg')
+            ('-filename', 'warmup.jpg')
         ])
         return sample_args
     except Exception as err:
