@@ -3,11 +3,45 @@
 ##      VTOONIFY AI
 ##
 
-import os
-import sys
-import argparse
-from pathlib import Path
+## ------------------------------------------------------------------------
+#       Generic (All AIs)
+## ------------------------------------------------------------------------
+
+import os, sys, argparse, shutil, time
 from datetime import datetime
+
+## for calling back OSAIS from AI
+gNotifyCallback=None
+gNotifyParams=None
+
+## Notifications from AI
+def setNotifyCallback(cb, _aParams): 
+    global gNotifyParams
+    global gNotifyCallback
+
+    gNotifyParams=_aParams
+    gNotifyCallback=cb
+
+## For a debug breakpoint
+def fnDebug(): 
+    return True
+
+## where to save the user profile?
+def fnGetUserdataPath(_username):
+    _path=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    DEFAULT_PROFILE_DIR = os.path.join(_path, '_profile')
+    USER_PROFILE_DIR = os.path.join(DEFAULT_PROFILE_DIR, _username)
+    return {
+        "location": USER_PROFILE_DIR,
+        "voice": False,
+        "picture": True
+    }
+
+## ------------------------------------------------------------------------
+#       Specific
+## ------------------------------------------------------------------------
+
+from pathlib import Path
 
 ## init
 sys.path.insert(0, './ai')
@@ -24,17 +58,6 @@ from model.vtoonify import VToonify
 from model.bisenet.model import BiSeNet
 from model.encoder.align_all_parallel import align_face
 from util import save_image, load_image, visualize, load_psp_standalone, get_video_crop_parameter, tensor2cv2
-
-## where to save the user profile?
-def fnGetUserdataPath(_username):
-    _path=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    DEFAULT_PROFILE_DIR = os.path.join(_path, '_profile')
-    USER_PROFILE_DIR = os.path.join(DEFAULT_PROFILE_DIR, _username)
-    return {
-        "location": USER_PROFILE_DIR,
-        "voice": False,
-        "picture": True
-    }
 
 ## WARMUP Data
 def getWarmupData(_id):
@@ -59,6 +82,7 @@ def getWarmupData(_id):
         print("Could not call warm up!\r\n")
         return None
 
+## RUN AI
 def fnRun(_args): 
     # Create the parser
     vq_parser = argparse.ArgumentParser(description='VToonify')

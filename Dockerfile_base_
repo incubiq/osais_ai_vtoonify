@@ -7,9 +7,8 @@ FROM yeepeekoo/public:ai_base_osais
 
 ## install requirements
 
-RUN pip3 install \
-    torchvision \
-    numpy
+RUN pip3 install torchvision
+RUN pip3 install numpy
 
 
 RUN pip3 install \
@@ -21,6 +20,7 @@ RUN pip3 install \
     wget
 
 RUN pip3 install torch
+RUN pip3 install torchvision
 RUN pip install lightning-utilities
 RUN pip3 install lightning
 
@@ -34,8 +34,10 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 
 RUN conda update conda
 
-RUN conda install -c pytorch -c conda-forge faiss-gpu
-RUN conda install -c pytorch-nightly -c nvidia cudatoolkit=11.3 torchvision
+RUN conda install -c conda-forge faiss-gpu
+# RUN conda install -c pytorch-nightly -c nvidia cudatoolkit=12.2 torchvision
+RUN conda install pytorch torchvision pytorch-cuda=12.2 -c pytorch -c nvidia
+RUN conda install -c pytorch-nightly
 
 #RUN conda install -c pytorch -c nvidia faiss-gpu=1.6.5
 #RUN conda install -c "pytorch/label/nightly" faiss-gpu

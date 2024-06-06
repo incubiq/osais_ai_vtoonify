@@ -5,9 +5,18 @@
 # base stuff
 FROM yeepeekoo/public:ai_vtoonify_
 
-## keep ai in its directory
-RUN mkdir -p ./ai
-RUN chown -R root:root ./ai
+###### update latest OSAIS config ######
+
+# push again the base files
+COPY ./_static/* ./_static
+COPY ./_templates/* ./_templates
+COPY ./_osais/* .
+
+# copy warmup files
+COPY ./_input/warmup.jpg ./_input/warmup.jpg
+
+
+###### specific AI config ######
 COPY ./ai/checkpoint/shape_predictor_68_face_landmarks.dat ./ai/checkpoint/shape_predictor_68_face_landmarks.dat
 COPY ./ai/checkpoint/faceparsing.pth ./ai/checkpoint/faceparsing.pth
 COPY ./ai/checkpoint/encoder.pt ./ai/checkpoint/encoder.pt
@@ -21,27 +30,8 @@ COPY ./ai/checkpoint/vtoonify_t_arcane ./ai/checkpoint/vtoonify_t_arcane
 COPY ./ai/model ./ai/model
 COPY ./ai/util.py ./ai/util.py
 COPY ./ai/runai.py ./ai/runai.py
-
-# push again the base files
-COPY ./_temp/static/* ./static
-COPY ./_temp/templates/* ./templates
-COPY ./_temp/osais.json .
-COPY ./_temp/main_fastapi.py .
-COPY ./_temp/main_flask.py .
-COPY ./_temp/main_common.py .
-
-COPY ./_temp/osais_auth.py .
-COPY ./_temp/osais_config.py .
-COPY ./_temp/osais_inference.py .
-COPY ./_temp/osais_main.py .
-COPY ./_temp/osais_pricing.py .
-COPY ./_temp/osais_s3.py .
-COPY ./_temp/osais_training.py .
-COPY ./_temp/osais_utils.py .
-
-# copy OSAIS mapping into AI
-COPY ./_input/warmup.jpg ./_input/warmup.jpg
-COPY ./vtoonify.json .
+COPY ./ai/config ./ai/config
+COPY ./ai/model ./ai/model
 
 # overload config with those default settings
 ENV ENGINE=vtoonify
